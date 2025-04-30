@@ -36,11 +36,11 @@ Các thư viện:
    1. Nhập các giá trị có giá từ 0-8 vào lưới "Start State" (0 đại diện cho ô trống hoặc không nhập gì)
    2. Nhấn nút "Update Start" để cập nhật lại trạng thái ban đầu
 ### **Chạy các thuật toán**
-   1. Chọn thuật toán từ menu dropdown (BFS,DFS,UCS,...) hoặc các thuật toán có hướng xử lý khác ở bên ngoài menu
+  1. Chọn thuật toán từ menu dropdown (BFS,DFS,UCS,...) hoặc các thuật toán có hướng xử lý khác ở bên ngoài menu
    ![Select Algorithm](https://github.com/user-attachments/assets/0418a759-fb66-485b-8cce-b552caa83046)
 
-   2.Nhấn nút "Run Algorithm" để thực thi thuật toán
-   3. Theo dõi tiến trình giải quyết trên giao diện "Current State"
+  2.Nhấn nút "Run Algorithm" để thực thi thuật toán
+  3. Theo dõi tiến trình giải quyết trên giao diện "Current State"
 ### **Điều khiển quá trình giải**
   **Next Step:** Di chuyển đến bước tiếp theo trong giải pháp
   **Back Step:** Quay lại bước trước đó
