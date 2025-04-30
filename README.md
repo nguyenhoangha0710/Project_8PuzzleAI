@@ -11,15 +11,16 @@ Trong ứng dụng này, trạng thái đích là:
               | 7 | 8 | 0 |
 
 ## **Tính năng**
-**Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking
-**Giao diện trực quan:** Theo dõi các trạng thái bắt đầu, hiện tại và đích
+* **Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking
+* **Giao diện trực quan:** Theo dõi các trạng thái bắt đầu, hiện tại và đích
+
 ![State 8-Puzzle](https://github.com/user-attachments/assets/dacc31eb-68c5-469e-8e19-a11d263a3886)
 
-**Điều khiển bước giải:** Chạy từng bước, tự động chạy, quay ngược bước trước
-**Tùy chỉnh trạng thái ban đầu:** Nhập trạng thái 8-Puzzle tùy chọn
-**Thống ke chi tiết:** So sánh thời gian thực thi, số bước thực hiện, chi phí và không gian tìm kiếm giữa các thuật toán
-**Trực quan hóa dữ liệu**: Tạo biểu đồ so sánh hiệu suất giữa các thuật toán
-**Xuất kết quả:** Lưu kết quả và đường đi vào file Excel để tiện cho phân tích sau này
+* **Điều khiển bước giải:** Chạy từng bước, tự động chạy, quay ngược bước trước
+* **Tùy chỉnh trạng thái ban đầu:** Nhập trạng thái 8-Puzzle tùy chọn
+* **Thống kê chi tiết:** So sánh thời gian thực thi, số bước thực hiện, chi phí và không gian tìm kiếm giữa các thuật toán
+* **Trực quan hóa dữ liệu**: Tạo biểu đồ so sánh hiệu suất giữa các thuật toán
+* **Xuất kết quả:** Lưu kết quả và đường đi vào file Excel để tiện cho phân tích sau này
 ## **Yêu cầu hệ thống**
 Môi trường Python
 Các thư viện: 
