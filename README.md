@@ -54,6 +54,37 @@ Trạng thái ban đầu (mặc định):
   * **Plot Graph:** Tạo biểu đồ so sánh hiệu suất giữa các thuật toán đã chạy
   ![image](https://github.com/user-attachments/assets/b0d6e37d-2974-4867-9218-a5caba657888)
 ### **Các thuật toán tìm kiếm**
+#### **Nhóm thuật toán tìm kiếm không có thông tin (Uninformed Search/Blind Search)**
+##### 1. Breadth-First Search (BFS - Tìm kiếm theo chiều rộng):
+   * Cách hoạt động: Khám phá tất cả các trạng thái ở cùng một mức (level) trước khi đi sâu hơn. Sử dụng hàng đợi
+   * Ưu điểm: Đảm bảo tìm được đường đi ngắn nhất (chi phí mỗi bước là như nhau) nếu bài toán có lời giải
+   * Nhược điểm: Tốn nhiều bộ nhớ vì phải lưu tất cả trạng thái ở mỗi mức
+##### 2. Depth-First Search (DFS - Tìm kiếm theo chiều sâu)
+   * Cách hoạt động: Khám phá một nhánh đến tận cùng trước khi quay lại và thử nhánh khác
+   * Ưu điểm: Tốn ít bộ nhớ hơn BFS vì chỉ lưu một nhánh tại 1 thời điểm
+   * Nhược điểm: Không đảm bảo tìm được đường đi ngắn nhất, có thể bị mắc kẹt
+##### 3. Uniform Cost Search (UCS - Tìm kiếm chi phí đồng nhất)
+   * Cách hoạt động: Mở rộng trạng thái có tổng chi phí thấp nhất từ trạng thái ban đầu (dựa vào chi phí đường đi không dựa trên heuritic)
+   * Ưu điểm: Đảm bảo tìm được đường đi tối thiểu nếu chi phí mỗi bước là  như nhau
+   * Nhược điểm: Tương tự BFS, tốn nhiều bộ nhớ
+   * Trong úng dụng này, chi phí của mỗi bước di chuyển là như nhau
+#### **Nhóm thuật toán tìm kiếm có thông tin**
+##### **Đây là nhóm thuật toán sử dụng thông tin heuristic để ưu tiên khám phá các trạng thái có khả năng dẫn đến mục tiêu nhanh hơn**
+##### **Đặc điểm:**
+  * Sử dụng hàm heuristic (hàm ước lượng khảng cách từ trạng thái hiện tại đến trạng thái mục tiêu) để định hướng tìm kiếm
+  * Nhanh hơn các thuật toán không có thông tin nhưng không phải lúc nào cũng đảm bảo tính tối ưu
+  * **Hàm heuristic** được sử dụng trong bài toán: Tổng khoảng cách Manhattan (theo hàng và cột) của mỗi ô từ vị trí hiện tại đến vị trí mục tiêu
+##### 1. Greedy Best-First Search(GBFS - Tìm kiếm tham lam theo ưu tiên):
+   * Cách hoạt động: Chỉ dựa vào hàm heuristic để chọn trạng thái tiếp theo (trạng thái có giá trị heuristic thấp nhất)
+   * Ưu điểm: Nhanh vì chỉ tập trung vào các trạng thái "hứa hẹn" nhất
+   * Nhược điểm: không đảm bảo tối ưu (có thể mắc kẹt)
+##### 2. A* Search(Tìm kiếm A*)
+   * 
+
+
+
+
+
 
 
 
