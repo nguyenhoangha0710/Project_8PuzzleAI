@@ -2,9 +2,11 @@ import heapq
 import copy
 import pygame
 import time
+import itertools
 from collections import deque 
 import random
 import math
+
 
 WIDTH, HEIGHT =800, 400
 TILE_SIZE = 80
@@ -34,10 +36,13 @@ def find_blank(state):
 
 def move_black(state,direct): 
     i,j=find_blank(state)
+    if i is None or j is None:
+        return None
     new_state=copy.deepcopy(state)
 
     moves = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
-
+    if direct not in moves:
+        return None
     di,dj=moves[direct]
     ni,nj=i+di,j+dj
 
@@ -433,3 +438,202 @@ def BeamSearch(start, goal, beam_width=2):
         max_space = max(max_space, len(queue) + len(visited))
     
     return None, -1, max_space
+
+
+
+# Mỗi hành động có thể có kết quả sai lệch (ngẫu nhiên)
+def nondeterministic_results(state, direction):
+    alternative = {
+        "U": ["U"],
+        "D": ["D"],
+        "L": ["L"],
+        "R": ["R"]
+    }
+    results = []
+    for d in alternative[direction]:
+        new_state = move_black(state, d)
+        if new_state:
+            results.append((d, new_state))
+    return results
+
+def and_or_search(start, goal, max_depth=20):
+    max_space = 1
+    visited = set()
+
+    def recur(node, path, depth,visited):
+        nonlocal max_space
+        if depth > max_depth:
+            return False, []
+        state_key = tuple(map(tuple, node.state))
+        if state_key in visited:
+            return False, []
+        if node.state == goal:
+            return True, []
+        best_path=None
+        # visited.add(tuple(map(tuple, node.state)))
+        visited.add(state_key)
+        for direction in ["U", "D", "L", "R"]:
+            successors = nondeterministic_results(node.state, direction)
+
+            all_success = True
+            local_paths = []
+
+            for move_dir, result_state in successors:
+                if tuple(map(tuple, result_state)) in visited:
+                    all_success = False
+                    break
+
+                child = Puzzle(result_state, node, move_dir, node.cost + 1)
+                success, sub_path = recur(child, path + [move_dir], depth + 1,visited)
+
+                if not success:
+                    all_success = False
+                    break
+                local_paths.append([move_dir] + sub_path)
+
+            if all_success and local_paths:
+                candidate_path = local_paths[0]
+                if not best_path or len(candidate_path) < len(best_path):
+                    best_path = candidate_path
+
+        visited.remove(state_key)
+        if best_path:
+            max_space = max(max_space, len(best_path) + len(visited))
+            return True, best_path
+        return False, []
+
+    root = Puzzle(start)
+    success, path = recur(root, [], 0,set())
+    if success:
+        return path, len(path), max_space
+    else:
+        return None, -1, max_space
+    
+
+def bfs_Belief(start_belief, goal_belief):
+    queue = deque([Puzzle(start_belief)])
+    visited = set()
+    max_space = 1  # Theo dõi bộ nhớ tối đa
+
+    # Chuyển goal_belief thành tập hợp tuple để kiểm tra nhanh
+    goal_set = {tuple(map(tuple, state)) for state in goal_belief}
+
+    while queue:
+        node = queue.popleft()
+        # Kiểm tra xem tất cả trạng thái trong node.states có trong goal_belief không
+        flag = True
+        for state in node.states:
+            if tuple(map(tuple, state)) not in goal_set:
+                flag = False
+                break
+
+        if flag:
+            # Xây dựng đường đi
+            path = []
+            while node.parent:
+                path.append(node.move)
+                node = node.parent
+            return True, path[::-1], max_space
+
+        # Chuyển mảng trạng thái thành tuple để thêm vào visited
+        state_tuple = tuple(tuple(map(tuple, state)) for state in node.states)
+        visited.add(state_tuple)
+
+        # Tạo các mảng trạng thái mới
+        for move in ["U", "D", "L", "R"]:
+            new_state_belief = []
+            valid_move = False
+            for state in node.states:
+                new_state = move_black(state, move)
+                if new_state:
+                    new_state_belief.append(new_state)
+                    valid_move = True
+                else:
+                    new_state_belief.append(state)  # Giữ nguyên nếu không di chuyển được
+            # Chỉ thêm vào queue nếu có ít nhất một trạng thái thay đổi
+            if valid_move:
+                new_state_tuple = tuple(tuple(map(tuple, state)) for state in new_state_belief)
+                if new_state_tuple not in visited:
+                    queue.append(Puzzle(new_state_belief, node, move, node.cost + 1))
+                    max_space = max(max_space, len(queue) + len(visited))
+    return False, None, max_space
+    
+
+def BackTracking(values,visited=None,path=None): 
+        visited=set()
+        path=[]
+        def dfs_BT(depth): 
+            if len(visited) == len(values): 
+                return True
+            for x in values:
+                if x not in visited and (not path or x > path[-1]): 
+                    path.append(x)
+                    visited.add(x)
+                    if dfs_BT(depth+1):
+                        return True
+                    path.pop()
+                    visited.remove(x)
+            return False
+        success=dfs_BT(0)
+        return (path,len(path)) if success else (None,-1)
+
+
+def is_solvable(state):
+    """
+    Kiểm tra xem trạng thái có thể giải được không bằng cách kiểm tra số nghịch đảo (inversion count).
+    """
+    flat = [num for row in state for num in row if num != 0]
+    inv_count = 0
+    for i in range(len(flat)):
+        for j in range(i + 1, len(flat)):
+            if flat[i] > flat[j]:
+                inv_count += 1
+    return inv_count % 2 == 0
+
+def generate_all_states():
+    """
+    Sinh tất cả các trạng thái của 8-Puzzle và kiểm tra tính solvable của từng trạng thái.
+    """
+    values = list(range(9)) 
+    all_permutations = itertools.permutations(values)  # Sinh tất cả các hoán vị
+
+    solvable_states = []  # Lưu trữ các trạng thái hợp lệ
+    for perm in all_permutations:
+        state = [list(perm[i*3:(i+1)*3]) for i in range(3)]
+        if checkif(state): 
+            solvable_states.append(state)
+
+    return solvable_states
+
+def checkif(state): 
+    for i in range(3):
+        for j in range(2): 
+            if state[i][j+1] != state[i][j] + 1:
+                return False
+
+    for i in range(2):  
+        for j in range(3):
+            if state[i+1][j] != state[i][j] + 3:
+                return False
+
+    # Nếu cả hai điều kiện đều thỏa mãn
+    return True
+
+
+# if __name__=="__main__": 
+#     values = [2,3,4,1,5,7,6,8]
+#     result,len=BackTracking(values)
+#     print("ket qua: ",result)
+
+#     array=generate_all_states()
+#     for x in array : 
+#         print(x)
+
+
+
+         
+
+
+    
+    
+

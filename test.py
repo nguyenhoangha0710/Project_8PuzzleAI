@@ -482,3 +482,7 @@ class PuzzleGUI:
                 messagebox.showinfo("Export Successful", f"Solution path exported to {file_path}")
         except Exception as e:
             messagebox.showerror("Export Failed", f"An error occurred: {str(e)}")
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = PuzzleGUI(root)
+    root.mainloop()
