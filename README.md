@@ -39,7 +39,7 @@ Các thư viện:
 1. Chọn thuật toán từ menu dropdown (BFS,DFS,UCS,...) hoặc các thuật toán có hướng xử lý khác ở bên ngoài menu
    ![Select Algorithm](https://github.com/user-attachments/assets/0418a759-fb66-485b-8cce-b552caa83046)
    
-2.Nhấn nút "Run Algorithm" để thực thi thuật toán
+2. Nhấn nút "Run Algorithm" để thực thi thuật toán
 3. Theo dõi tiến trình giải quyết trên giao diện "Current State"
 ### **Điều khiển quá trình giải**
   **Next Step:** Di chuyển đến bước tiếp theo trong giải pháp
