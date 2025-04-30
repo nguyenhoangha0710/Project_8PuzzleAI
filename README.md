@@ -13,9 +13,6 @@ Trong ứng dụng này, trạng thái đích là:
 ## **Tính năng**
 * **Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking
 * **Giao diện trực quan:** Theo dõi các trạng thái bắt đầu, hiện tại và đích
-
-![State 8-Puzzle](https://github.com/user-attachments/assets/dacc31eb-68c5-469e-8e19-a11d263a3886)
-
 * **Điều khiển bước giải:** Chạy từng bước, tự động chạy, quay ngược bước trước
 * **Tùy chỉnh trạng thái ban đầu:** Nhập trạng thái 8-Puzzle tùy chọn
 * **Thống kê chi tiết:** So sánh thời gian thực thi, số bước thực hiện, chi phí và không gian tìm kiếm giữa các thuật toán
@@ -37,6 +34,8 @@ Trạng thái ban đầu (mặc định):
          | 8 | 3 | 0 |
 1. Nhập các giá trị có giá từ 0-8 vào lưới "Start State" (0 đại diện cho ô trống hoặc không nhập gì)
 2. Nhấn nút "Update Start" để cập nhật lại trạng thái ban đầu
+   ![State 8-Puzzle](https://github.com/user-attachments/assets/dacc31eb-68c5-469e-8e19-a11d263a3886)
+   
 ### **Chạy các thuật toán**
 1. Chọn thuật toán từ menu dropdown (BFS,DFS,UCS,...) hoặc các thuật toán có hướng xử lý khác ở bên ngoài menu
    ![Select Algorithm](https://github.com/user-attachments/assets/0418a759-fb66-485b-8cce-b552caa83046)
