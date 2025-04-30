@@ -29,7 +29,8 @@ Các thư viện:
   * Các thư viên chuẩn khác : time, copy, collections, heapq
 ## **Hướng dẫn sử dụng**
 ### **Cách thiết lập trạng thái ban đầu**
-   Trạng thái ban đầu (mặc định):
+Trạng thái ban đầu (mặc định):
+
          | 1 | 6 | 2 |
          | 5 | 7 | 4 |
          | 8 | 3 | 0 |
