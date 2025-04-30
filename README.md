@@ -79,11 +79,83 @@ Trạng thái ban đầu (mặc định):
    * Ưu điểm: Nhanh vì chỉ tập trung vào các trạng thái "hứa hẹn" nhất
    * Nhược điểm: không đảm bảo tối ưu (có thể mắc kẹt)
 ##### 2. A* Search(Tìm kiếm A*)
-   * 
-
-
-
-
+   * Cách hoạt động: Kết hợp chi phí đã đi (g) và heuristic (h): f(n)=g(n)+h(n). Mở rộng trạng thái có giá trị f(n) thấp nhất.
+   * Ưu điểm: Đảm bảo tìm được đường đi tối ưu nếu hàm heuristic là "admissible" (không bao giờ đánh giá quá cao so với thực tế).
+   * Nhược điểm: Khá tốn bộ nhớ
+#### 3.Iterative Deepening A (IDA* - A* lặp sâu):
+  *  Cách hoạt động: Kết hợp ý tưởng của Iterative Deepening (tăng dần giới hạn độ sâu) với A*. Mỗi vòng lặp sử dụng một ngưỡng f(n) để giới hạn tìm kiếm
+  *  Ưu điểm: Tốn ít bộ nhớ hơn A* vì không lưu toàn bộ
+  *  Nhược điểm: Có thể lặp lại việc khám phá trạng thái, dẫn đến thời gian chạy lâu hơn A*
+### **Nhóm thuật tìm kiếm toán cục bộ**
+#### Đây là thuật toán không khám phá toàn bộ trạng thái mà tập trung vào việc tập trung cải thiện một trạng thái hiện tại, thường dùng cho các bài toán tối ưu
+#### Đặc điểm:
+  * Bắt đầu từ một trạng thái ban đầu và cải thiện dần trạng thái đó theo một tiêu chí (thường là heuristic)
+  * Không đảm bảo tìm được lời giải tối ưu toàn cục, nhưng nhanh và hiệu quả ở các bài toán lớn 
+  * Không lưu trữ nhiều trạng thái, chỉ làm việc với một hoặc hai trạng thái tại 1 thời điểm
+#### 1.Hill ClimBing(Leo đồi)
+  * Cách hoạt động: Từ trạng thái hiện tại, chọn trạng thái láng giềng có giá trị heuristic tốt nhất (giảm nhất). Lặp lại cho đến khi không thể cải thiện thêm.
+  * Ưu điểm: Rất nhanh, tốn ít bộ nhớ
+  * Nhược điểm: Dễ bị mắc kẹt ở "đỉnh tối ưu cục bộ" (local optima), không đảm bảo tìm được mũ tiêu
+#### 2. Stochastic Hill ClimBing (Leo đôi ngẫu nhiên): 
+  * Cách hoạt động: Tương tự Hill ClimBing, nhưng thay vì chọn láng giềng tốt nhất thì chọn ngẫu nhiên một láng giềng có giá trị tổt hơn
+  * Ưu điểm: Giảm khả năng bị mắc kẹt ở tối ưu cục bộ so với Hill Climbing thông thường
+  * Nhược điểm: Vẫn không đảm bảo được lời giải
+#### 3. Simulated Annealing (Ủ nhiệt mô phỏng)
+  * Cách hoạt động: Giống Hill ClimBing, nhưng trong trường tất cả các láng giềng đều có giá trị xấu hơn trạng thái hiện tại, cho phép chọn trạng thái tiếp theo với xác suất phụ thuộc vào "nhiệt độ" (temperature). Nhiệt độ giảm dần theo thời gian.
+  * Ưu điểm: Có khả năng thoát khỏi tối ưu cục bộ nhờ cơ chế ngẫu nhiên
+  * Nhược điểm: Cần điều chỉnh tham số (nhiệt độ ban đầu, tốc độ giảm nhiệt) để đạt được hiệu quả
+#### 4. Beam Search (Tìm kiếm chùm): 
+  * Cách hoạt động: Kết hợp ý tưởng của BFS và tìm kiếm cục bộ. Chỉ giữ lại một số lượng cố định (beam width) các trạng thái tổt nhất với mỗi mức.
+  * Ưu điểm: Tiết kiệm bộ nhớ so với BFS, nhanh hơn nhờ giới hạn trạng thái
+  * Nhược điểm: Không đảm bảo tối ưu, có thể bỏ sót trạng thái dẫn đến mục tiêu
+### **Nhóm thuật toán tìm kiếm trong môi trường không xác định**
+#### Nondeterministic Enviroments : Đây là nhóm thuật toán được thiết kế để xử lý các bài toán mà kết quả của một hành động không chắc chắn (có thể dẫn đến nhiều trạng thái khác nhau)
+#### 1. And-or search
+  * Khái niệm cơ bản:
+    - Trong không gian có 2 loại nút:
+      + or nodes: Đại diện cho các lựa chọn của tác nhân (agent). Tác nhân chỉ chọn 1 nhánh con để giải quyết (tương tự như các nút thông thường)
+      + and nodes: Đại diện cho kết quả không xác định của 1 hành động. Tác nhân phải giải quyết tất cả các nhánh con
+  * Mục tiêu:  Là xây dựng một cây giải pháp, một kế hoạch để hướng đến trạng thái mục tiêu
+  * Ưu điểm:
+    - Xử lý môi trường không xác định
+    - Kết quả là một cây giải pháp, cho phép tác nhân chuẩn bị cho mọi kịch bản có thể xảy ra
+    - Ứng dụng rộng
+  * Nhược điểm:
+    - Phức tạp và tốn tài nguyên: Việc xây dựng cây giải pháp yêu cầu khám phá nhiều nhánh, dẫn đến chi phí tính toán và bộ nhớ cao
+    - Khó triển khai
+#### 2. Belief Search(Tìm kiếm dựa trên niềm tin)
+  * Cách hoạt động: Được thiết kế cho các bài toán trong môi trường không xác định hoặc nhìn thấy một phần, nơi tác nhân không biết chính xác trạng thái hiện tại của mình. Tác nhân duy trì một tập belief state (tập hợp ác trạng thái có thể xảy ra) và cập nhật niềm tin dựa trên hành động và quan sát
+  * Các bước hoạt động:
+      - Khởi tạo belief state ban đầu và mục tiêu: Bắt đầu với một tập hợp trạng thái có thể xảy ra (dựa vào thông tin ban đầu)
+      - Thực hiện hành động
+        + Chọn một hành động
+        + Dựa trên mô hình chuyển đổi trạng thái, tính toán tập hợp các trạng thái có thể xảy ra sau hành động
+      - Cập nhật belief state dựa trên quan sát bằng cách loại bỏ đi những trại không phù hợp
+      - Trả về kế hoạch: Kế hoạch là một chuỗi hành động đảm bảo đạt được mục tiêu, bất kể trạng thái thật sự là gì
+  * Ưu điểm:
+    - Xử lý các bài toán mà tác nhân không biết chính xác trạng thái hiện tại
+    - Linh hoạt: Có thể kết hợp với các thuật toán tìm kiếm khác (như A*,BFS,...) trên không gian belief state để tối ưu hóa kế hoạch
+    - Nhiều ứng dụng thực tế
+  * Nhược điểm:
+    - Phức tạp tính toán
+    - Tốn bộ nhớ: Belief state có thể tăng trường theo cấp số nhân, dẫn đến khó khăn trong việc lưu trữ và xử lý
+    - Khó triển khai
+### **Nhóm thuật toán có ràng buộc điều kiện**
+#### Định nghĩa: 
+  * Biến (Variables) : Các đối tượng cần giá trị (Ví dụ: các ô trong lưới 8-Puzzle)
+  * Miền giá trị (Domains): Tập hợp các giá trị có thể gán (ví dụ: các số từ 0 - 8 trong bài toán 8-Puzzle)
+  * Ràng buộc (Constraints): Các điều kiện mà các biến phải thỏa mãn (vú dụ: Mỗi ô trong 8-Puzzle phải là duy nhất)
+  * Mục tiêu: Tìm cách gán giá trị cho tất cả các biến sao cho thỏa mãn tất cả các ràng buộc trên
+#### 1. Backtracking Search (Tìm kiếm quay lui):
+  * Cách hoạt động: đệ quy để thử các giá trị cho từng biến, quay lui (backtrack) khi gặp đường cụt
+  * Ưu điểm:
+    - Đơn giản và dễ triển khai
+    - Đảm bảo tìm được lời giải nếu có
+    - Tốn ít bộ nhớ
+  * Nhược điểm:
+    - Hiệu suất thấp: Backtracking thử tất cả các khả năng 1 cách mù quáng, dẫn đến thời gian có thể chạy rất lâu nếu không gian tìm kiếm lớn
+    - Không tối ưu: không đảm bảo tìm được đường đi ngắn nhất
+      
 
 
 
