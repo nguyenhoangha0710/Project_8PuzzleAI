@@ -43,15 +43,15 @@ Trạng thái ban đầu (mặc định):
 2. Nhấn nút "Run Algorithm" để thực thi thuật toán
 3. Theo dõi tiến trình giải quyết trên giao diện "Current State"
 ### **Điều khiển quá trình giải**
-  **Next Step:** Di chuyển đến bước tiếp theo trong giải pháp
-  **Back Step:** Quay lại bước trước đó
-  **Auto Run:** Tự động thực hiện các bước với tốc độ 1 bước/giây
-  **Stop:** Dừng chế độ tự động chạy
+  * **Next Step:** Di chuyển đến bước tiếp theo trong giải pháp
+  * **Back Step:** Quay lại bước trước đó
+  * **Auto Run:** Tự động thực hiện các bước với tốc độ 1 bước/giây
+  * **Stop:** Dừng chế độ tự động chạy
   ![image](https://github.com/user-attachments/assets/f4ab9ac7-f8de-4131-b7b2-3f60f2555438)
 
 ### **Phân tích kết quả**
-  **Export:** Lưu đường đi giải quyết vào file Excel
-  **Plot Graph:** Tạo biểu đồ so sánh hiệu suất giữa các thuật toán đã chạy
+  * **Export:** Lưu đường đi giải quyết vào file Excel
+  * **Plot Graph:** Tạo biểu đồ so sánh hiệu suất giữa các thuật toán đã chạy
   ![image](https://github.com/user-attachments/assets/b0d6e37d-2974-4867-9218-a5caba657888)
 ### **Các thuật toán tìm kiếm**
 
