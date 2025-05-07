@@ -56,18 +56,29 @@ Trạng thái ban đầu (mặc định):
 ## **Các thuật toán tìm kiếm**
 ### **Nhóm thuật toán tìm kiếm không có thông tin (Uninformed Search/Blind Search)**
 #### 1. Breadth-First Search (BFS - Tìm kiếm theo chiều rộng):
-   * Cách hoạt động: Khám phá tất cả các trạng thái ở cùng một mức (level) trước khi đi sâu hơn. Sử dụng hàng đợi
-   * Ưu điểm: Đảm bảo tìm được đường đi ngắn nhất (chi phí mỗi bước là như nhau) nếu bài toán có lời giải
-   * Nhược điểm: Tốn nhiều bộ nhớ vì phải lưu tất cả trạng thái ở mỗi mức
+   * Cách hoạt động: Khám phá tất cả các trạng thái ở cùng một mức (level) trước khi đi sâu hơn. Sử dụng hàng đợi (queue) để mở rộng các trạng thái theo thứ tự từ gần nhất cho đến xa nhất so với trạng thái ban đầu.
+   * Ưu điểm: Đảm bảo tìm được đường đi ngắn nhất (chi phí mỗi bước là như nhau) nếu bài toán có lời giải.
+   * Nhược điểm:
+     * Tốn nhiều bộ nhớ vì phải lưu tất cả trạng thái ở mỗi mức.
+     * Thời gian chạy có thể chậm nếu độ sâu của giải pháp lớn.
+   *  Độ phức tạp:
+     * **Thời gian**: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle: lên, xuống, trái, phải), và \( d \) là độ sâu của trạng thái mục tiêu. Với 8-puzzle, \( b \) thường là 2-3 (do một số di chuyển không hợp lệ), và \( d \) có thể lên đến 31 (độ sâu tối đa cho một số trạng thái).
+     * Bộ nhớ: \( O(b^d) \), vì BFS phải lưu trữ tất cả các trạng thái ở độ sâu hiện tại trong hàng đợi.
 #### 2. Depth-First Search (DFS - Tìm kiếm theo chiều sâu)
-   * Cách hoạt động: Khám phá một nhánh đến tận cùng trước khi quay lại và thử nhánh khác
+   * Cách hoạt động: Khám phá một nhánh đến tận cùng trước khi quay lại và thử nhánh khác. Thuật toán sử dụng ngăn xếp (stack) hoặc đệ quy để quản lý các trạng thái cần mở rộng.
    * Ưu điểm: Tốn ít bộ nhớ hơn BFS vì chỉ lưu một nhánh tại 1 thời điểm
    * Nhược điểm: Không đảm bảo tìm được đường đi ngắn nhất, có thể bị mắc kẹt
+   * Độ phức tạp:
+      * Thời gian: \( O(b^d) \), trong đó \( b \) là nhánh trung bình (tối đa 4 trong 8-puzzle), và \( d \) là độ sâu tối đa của cây tìm kiếm (có thể lên đến \( 9! = 362,880 \) nếu không cắt tỉa).
+      * Bộ nhớ: \( O(d) \), vì DFS chỉ lưu trữ các trạng thái trên nhánh hiện tại.
 #### 3. Uniform Cost Search (UCS - Tìm kiếm chi phí đồng nhất)
    * Cách hoạt động: Mở rộng trạng thái có tổng chi phí thấp nhất từ trạng thái ban đầu (dựa vào chi phí đường đi không dựa trên heuritic)
    * Ưu điểm: Đảm bảo tìm được đường đi tối thiểu nếu chi phí mỗi bước là  như nhau
-   * Nhược điểm: Tương tự BFS, tốn nhiều bộ nhớ
+   * Nhược điểm: Tương tự BFS, tốn nhiều bộ nhớ vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên.
    * Trong úng dụng này, chi phí của mỗi bước di chuyển là như nhau
+   * Độ phức tạp:
+      * Thời gian: \( O(b^{C*/ε}) \), trong đó \( b \) là nhánh trung bình, \( C* \) là chi phí của đường đi tối ưu, và \( ε \) là chi phí nhỏ nhất của một bước (\( ε = 1 \) trong 8-puzzle, nên tương đương \( O(b^d) \)).
+      * Bộ nhớ: \( O(b^{C*/ε}) \), tương tự BFS.
 ### **Nhóm thuật toán tìm kiếm có thông tin**
 #### **Đây là nhóm thuật toán sử dụng thông tin heuristic để ưu tiên khám phá các trạng thái có khả năng dẫn đến mục tiêu nhanh hơn**
 #### **Đặc điểm:**
@@ -75,17 +86,37 @@ Trạng thái ban đầu (mặc định):
   * Nhanh hơn các thuật toán không có thông tin nhưng không phải lúc nào cũng đảm bảo tính tối ưu
   * **Hàm heuristic** được sử dụng trong bài toán: Tổng khoảng cách Manhattan (theo hàng và cột) của mỗi ô từ vị trí hiện tại đến vị trí mục tiêu
 #### 1. Greedy Best-First Search(GBFS - Tìm kiếm tham lam theo ưu tiên):
-   * Cách hoạt động: Chỉ dựa vào hàm heuristic để chọn trạng thái tiếp theo (trạng thái có giá trị heuristic thấp nhất)
-   * Ưu điểm: Nhanh vì chỉ tập trung vào các trạng thái "hứa hẹn" nhất
-   * Nhược điểm: không đảm bảo tối ưu (có thể mắc kẹt)
+   * Cách hoạt động: Chỉ dựa vào hàm heuristic để chọn trạng thái tiếp theo (trạng thái có giá trị heuristic tốt nhất với vấn đề).
+   * Ưu điểm:
+     * Nhanh vì chỉ tập trung vào các trạng thái "hứa hẹn" nhất.
+     * Tiêu tốn ít bộ nhớ hơn BFS nếu heuristic tốt, vì chỉ tập trung vào các trạng thái "hứa hẹn".
+   * Nhược điểm:
+     * không đảm bảo tối ưu (có thể mắc kẹt).
+     * Hiệu quả phụ thuộc nhiều vào chất lượng của heuristic; nếu heuristic không tốt, có thể bị mắc kẹt.
+   * Độ phức tạp:
+     * Thời gian: \( O(b^d) \), trong đó \( b \) là nhánh trung bình, và \( d \) là độ sâu tối đa của cây tìm kiếm. Phụ thuộc vào chất lượng heuristic.
+     * Bộ nhớ: \( O(b^d) \), nhưng thường ít hơn BFS nếu heuristic hiệu quả. 
 #### 2. A* Search(Tìm kiếm A*)
-   * Cách hoạt động: Kết hợp chi phí đã đi (g) và heuristic (h): f(n)=g(n)+h(n). Mở rộng trạng thái có giá trị f(n) thấp nhất.
-   * Ưu điểm: Đảm bảo tìm được đường đi tối ưu nếu hàm heuristic là "admissible" (không bao giờ đánh giá quá cao so với thực tế).
-   * Nhược điểm: Khá tốn bộ nhớ
+   * Cách hoạt động: A* Search là một thuật toán tìm kiếm có thông tin, kết hợp chi phí đã đi \( g \) (từ trạng thái ban đầu đến trạng thái hiện tại) với giá trị heuristic \( h \) (ước lượng chi phí từ trạng thái hiện tại đến mục tiêu) để tìm đường đi tối ưu. Thuật toán sử dụng hàng đợi ưu tiên (priority queue) .Kết hợp chi phí đã đi (g) và heuristic (h): f(n)=g(n)+h(n). Mở rộng trạng thái có giá trị f(n) thấp nhất.
+   * Ưu điểm:
+     * Đảm bảo tìm được đường đi tối ưu nếu hàm heuristic là "admissible" (không bao giờ đánh giá quá cao so với thực tế).
+     * Hiệu quả hơn BFS và UCS nhờ heuristic định hướng tìm kiếm, giảm số trạng thái cần duyệt.
+     *  Hoàn chỉnh (luôn tìm được giải pháp nếu nó tồn tại).
+   * Nhược điểm:
+     * Khá tốn bộ nhớ vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên
+     * Thời gian chạy phụ thuộc vào chất lượng heuristic; nếu heuristic kém, hiệu suất có thể giảm.
+   * Độ phức tạp:
+     * Thời gian: \( O(b^d) \), nhưng thường nhanh hơn BFS nhờ heuristic. Số trạng thái duyệt qua phụ thuộc vào chất lượng của \( h \).
+     * Bộ nhớ: \( O(b^d) \), tương tự BFS, nhưng số trạng thái lưu trữ thường ít hơn nhờ heuristic. 
 #### 3.Iterative Deepening A (IDA* - A* lặp sâu):
   *  Cách hoạt động: Kết hợp ý tưởng của Iterative Deepening (tăng dần giới hạn độ sâu) với A*. Mỗi vòng lặp sử dụng một ngưỡng f(n) để giới hạn tìm kiếm
-  *  Ưu điểm: Tốn ít bộ nhớ hơn A* vì không lưu toàn bộ
-  *  Nhược điểm: Có thể lặp lại việc khám phá trạng thái, dẫn đến thời gian chạy lâu hơn A*
+  *  Ưu điểm: Tốn ít bộ nhớ hơn A* vì chỉ lưu trữ các trạng thái trên nhánh hiện tại.
+  *  Nhược điểm:
+    * Có thể lặp lại việc khám phá trạng thái, dẫn đến thời gian chạy lâu hơn A*
+    * Hiệu quả phụ thuộc vào chất lượng heuristic.
+  * Độ phức tạp:
+    * Thời gian: \( O(b^d) \), nhưng có thể chậm hơn A* do lặp lại.
+    * Bộ nhớ: \( O(d) \), tiết kiệm hơn A*.
 ### **Nhóm thuật tìm kiếm toán cục bộ**
 #### Đây là thuật toán không khám phá toàn bộ trạng thái mà tập trung vào việc tập trung cải thiện một trạng thái hiện tại, thường dùng cho các bài toán tối ưu
 #### Đặc điểm:
@@ -94,20 +125,38 @@ Trạng thái ban đầu (mặc định):
   * Không lưu trữ nhiều trạng thái, chỉ làm việc với một hoặc hai trạng thái tại 1 thời điểm
 #### 1.Hill ClimBing(Leo đồi)
   * Cách hoạt động: Từ trạng thái hiện tại, chọn trạng thái láng giềng có giá trị heuristic tốt nhất (giảm nhất). Lặp lại cho đến khi không thể cải thiện thêm.
-  * Ưu điểm: Rất nhanh, tốn ít bộ nhớ
-  * Nhược điểm: Dễ bị mắc kẹt ở "đỉnh tối ưu cục bộ" (local optima), không đảm bảo tìm được mũ tiêu
-#### 2. Stochastic Hill ClimBing (Leo đôi ngẫu nhiên): 
+  * Ưu điểm:
+    * Rất nhanh, vì chỉ xem xét các trạng thái lân cận.
+    * Tiết kiệm bộ nhớ, chỉ lưu trữ trạng thái hiện tại.
+  * Nhược điểm:
+    * Dễ bị mắc kẹt ở "đỉnh tối ưu cục bộ" (local optima)
+    * Không đảm bảo tìm được mũ tiêu
+#### 2. Stochastic Hill ClimBing (Leo đôi ngẫu nhiên):
   * Cách hoạt động: Tương tự Hill ClimBing, nhưng thay vì chọn láng giềng tốt nhất thì chọn ngẫu nhiên một láng giềng có giá trị tổt hơn
-  * Ưu điểm: Giảm khả năng bị mắc kẹt ở tối ưu cục bộ so với Hill Climbing thông thường
-  * Nhược điểm: Vẫn không đảm bảo được lời giải
+  * Ưu điểm:
+    * Giảm khả năng bị mắc kẹt ở tối ưu cục bộ so với Hill Climbing thông thường
+    * Vẫn nhanh và tốn ít bộ nhớ
+  * Nhược điểm:
+    * Không đảm bảo được tính tối ưu và hoàn chỉnh
+    * Hiệu quả phụ thuộc vào yếu tố ngẫu nhiên
 #### 3. Simulated Annealing (Ủ nhiệt mô phỏng)
-  * Cách hoạt động: Giống Hill ClimBing, nhưng trong trường tất cả các láng giềng đều có giá trị xấu hơn trạng thái hiện tại, cho phép chọn trạng thái tiếp theo với xác suất phụ thuộc vào "nhiệt độ" (temperature). Nhiệt độ giảm dần theo thời gian.
-  * Ưu điểm: Có khả năng thoát khỏi tối ưu cục bộ nhờ cơ chế ngẫu nhiên
-  * Nhược điểm: Cần điều chỉnh tham số (nhiệt độ ban đầu, tốc độ giảm nhiệt) để đạt được hiệu quả
+  * Cách hoạt động: Giống Hill ClimBing, nhưng trong trường tất cả các láng giềng đều có giá trị xấu hơn trạng thái hiện tại, chấp nhận các bước xấu (trạng thái con tệ hơn) với xác suất phụ thuộc vào "nhiệt độ" (temperature). Nhiệt độ giảm dần theo thời gian.
+  * Ưu điểm:
+    * Có khả năng thoát khỏi tối ưu cục bộ nhờ cơ chế ngẫu nhiên
+    * Linh hoạt, có thể điều chỉnh lịch làm nguội để cân bằng tốc độ và chất lượng.
+  * Nhược điểm:
+    * Cần điều chỉnh tham số (nhiệt độ ban đầu, tốc độ giảm nhiệt) để đạt được hiệu quả
+    * Không đảm bảo tính tối ưu hoặc hoàn chỉnh trong thời gian hữu hạn.
 #### 4. Beam Search (Tìm kiếm chùm): 
   * Cách hoạt động: Kết hợp ý tưởng của BFS và tìm kiếm cục bộ. Chỉ giữ lại một số lượng cố định (beam width) các trạng thái tổt nhất với mỗi mức.
-  * Ưu điểm: Tiết kiệm bộ nhớ so với BFS, nhanh hơn nhờ giới hạn trạng thái
-  * Nhược điểm: Không đảm bảo tối ưu, có thể bỏ sót trạng thái dẫn đến mục tiêu
+  * Ưu điểm:
+    * Tiết kiệm bộ nhớ so với BFS, nhanh hơn nhờ giới hạn trạng thái
+    * Nhanh hơn nếu \( k \) nhỏ, phù hợp với các bài toán lớn.
+    * Điều chỉnh linh hoạt, beamwidth(k) nhỏ thì nhanh, lớn thì chính xác hơn - dễ dàng cân bằng giữa tốc độ và độ chính xác.
+  * Nhược điểm:
+    * Không đảm bảo tối ưu, có thể bỏ sót trạng thái dẫn đến mục tiêu
+    * Nếu đi sai hướng thì không thể quay đầu
+    * Hiệu quả phụ thuộc vào giá trị \( k \) và chất lượng heuristic.
 ### **Nhóm thuật toán tìm kiếm trong môi trường không xác định**
 #### Nondeterministic Enviroments : Đây là nhóm thuật toán được thiết kế để xử lý các bài toán mà kết quả của một hành động không chắc chắn (có thể dẫn đến nhiều trạng thái khác nhau)
 #### 1. And-or search
@@ -119,6 +168,7 @@ Trạng thái ban đầu (mặc định):
   * Ưu điểm:
     - Xử lý môi trường không xác định
     - Kết quả là một cây giải pháp, cho phép tác nhân chuẩn bị cho mọi kịch bản có thể xảy ra
+    - Linh hoạt trong việc xử lý các không gian tìm kiếm phức tạp.
     - Ứng dụng rộng
   * Nhược điểm:
     - Phức tạp và tốn tài nguyên: Việc xây dựng cây giải pháp yêu cầu khám phá nhiều nhánh, dẫn đến chi phí tính toán và bộ nhớ cao
