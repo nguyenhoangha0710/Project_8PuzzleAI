@@ -178,7 +178,7 @@ Trạng thái ban đầu (mặc định):
   * Không đảm bảo tìm được lời giải tối ưu toàn cục, nhưng nhanh và hiệu quả ở các bài toán lớn 
   * Không lưu trữ nhiều trạng thái, chỉ làm việc với một hoặc hai trạng thái tại 1 thời điểm
 #### 1.Hill ClimBing(Leo đồi)
-  * Cách hoạt động: Từ trạng thái hiện tại, chọn trạng thái láng giềng có giá trị heuristic tốt nhất (giảm nhất). Lặp lại cho đến khi không thể cải thiện thêm.
+  * Cách hoạt động: Từ trạng thái hiện tại, chọn trạng thái láng giềng có giá trị heuristic tốt nhất (giảm nhất). Lặp lại cho đến khi không thể cải thiện thêm. Chỉ dựa trên heuristic, tương tự GBFS nhưng không khám phá nhiều trạng thái cùng lúc.
   * Ưu điểm:
     * Rất nhanh, vì chỉ xem xét các trạng thái lân cận.
     * Tiết kiệm bộ nhớ, chỉ lưu trữ trạng thái hiện tại.
@@ -189,31 +189,64 @@ Trạng thái ban đầu (mặc định):
     * Hiệu suất phụ thuộc vào hàm heuristic
     * Nếu trạng thái ban đầu xa mục tiêu hoặc nằm trong vùng dễ mắc kẹt cục bộ, Hill Climbing thường không tìm ra lời giải
 #### 2. Stochastic Hill ClimBing (Leo đôi ngẫu nhiên):
-  * Cách hoạt động: Tương tự Hill ClimBing, nhưng thay vì chọn láng giềng tốt nhất thì chọn ngẫu nhiên một láng giềng có giá trị tổt hơn
+  * Cách hoạt động: Tương tự Hill ClimBing, nhưng thay vì chọn láng giềng tốt nhất thì chọn ngẫu nhiên một láng giềng có giá trị tổt hơn.
   * Ưu điểm:
     * Giảm khả năng bị mắc kẹt ở tối ưu cục bộ so với Hill Climbing thông thường
     * Vẫn nhanh và tốn ít bộ nhớ
+    * Dễ triển khai, chỉ cần heuristic và logic chọn ngẫu nhiên dựa trên xác suất
   * Nhược điểm:
     * Không đảm bảo được tính tối ưu và hoàn chỉnh
-    * Hiệu quả phụ thuộc vào yếu tố ngẫu nhiên
+    * Tính ngẫu nhiên không kiểm soát: Việc chọn ngẫu nhiên có thể dẫn đến chọn trạng thái kém hơn và làm tăng số bước không cần thiết.
+    *  Nếu trạng thái ban đầu xa mục tiêu hoặc nằm trong vùng dễ mắc kẹt cục bộ, Hill Climbing thường không tìm ra lời giải
 #### 3. Simulated Annealing (Ủ nhiệt mô phỏng)
   * Cách hoạt động: Giống Hill ClimBing, nhưng trong trường tất cả các láng giềng đều có giá trị xấu hơn trạng thái hiện tại, chấp nhận các bước xấu (trạng thái con tệ hơn) với xác suất phụ thuộc vào "nhiệt độ" (temperature). Nhiệt độ giảm dần theo thời gian.
+  * Đặc điểm nổi bật:
+    * Thoát cực trị cục bộ: Cơ chế chấp nhận trạng thái kém hơn với xác suất giảm dần giúp vượt qua cực trị cục bộ, cải thiện so với  Hill ClimBing và Stochastic Hill ClimBing.
+    * Linh hoạt : Có thể điều chỉnh nhiệt độ ban đầu, lịch trình làm nguội và xác suất chấp nhận để cân bằng.
   * Ưu điểm:
-    * Có khả năng thoát khỏi tối ưu cục bộ nhờ cơ chế ngẫu nhiên
+    * Có khả năng thoát khỏi tối ưu cục bộ nhờ cơ chế ngẫu nhiên.
     * Linh hoạt, có thể điều chỉnh lịch làm nguội để cân bằng tốc độ và chất lượng.
+    * Tốn ít bộ  nhớ do chỉ lưu trạng thái hiện tại và các trạng thái lân cận.
+    * hiệu quả trong các bài toán phức tạp và không gian lớn.
   * Nhược điểm:
     * Cần điều chỉnh tham số (nhiệt độ ban đầu, tốc độ giảm nhiệt) để đạt được hiệu quả
     * Không đảm bảo tính tối ưu hoặc hoàn chỉnh trong thời gian hữu hạn.
 #### 4. Beam Search (Tìm kiếm chùm): 
   * Cách hoạt động: Kết hợp ý tưởng của BFS và tìm kiếm cục bộ. Chỉ giữ lại một số lượng cố định (beam width) các trạng thái tổt nhất với mỗi mức.
+  * Đặc điểm nổi bật:
+    * Giới hạn khám phá: Chỉ giữ lại trạng thái tốt nhất ở mỗi mức độ sâu, giảm đáng kể bộ nhớ so với BFS và A*.
+    * Beam width cho phép điều chỉnh mức độ chi tiết của tìm kiếm. 
   * Ưu điểm:
     * Tiết kiệm bộ nhớ so với BFS, nhanh hơn nhờ giới hạn trạng thái
     * Nhanh hơn nếu \( k \) nhỏ, phù hợp với các bài toán lớn.
     * Điều chỉnh linh hoạt, beamwidth(k) nhỏ thì nhanh, lớn thì chính xác hơn - dễ dàng cân bằng giữa tốc độ và độ chính xác.
   * Nhược điểm:
-    * Không đảm bảo tối ưu, có thể bỏ sót trạng thái dẫn đến mục tiêu
+    * Không đảm bảo tối ưu, có thể bỏ sót trạng thái dẫn đến mục tiêu.
     * Nếu đi sai hướng thì không thể quay đầu
-    * Hiệu quả phụ thuộc vào giá trị \( k \) và chất lượng heuristic.
+    * Hiệu quả phụ thuộc vào giá trị \( k \): Nếu k quá nhỏ, thuật toán trở nên quá tham lam; nếu quá lớn, tốn bộ nhớ và thời gian.
+    * Hiệu quả phụ thuộc vào chất lượng heuristic.
+#### 5. Genetic algorithm (thuật toán di truyền):
+  * Cách hoạt động : Quá trình chọn lọc tự nhiên để tìm kiếm giải pháp tối ưu hoặc gần tối ưu.
+    * Quần thể : Tập hợp các cá thể, mỗi cá thể là trạng thái bảng 3x3
+    * Hàm đánh giá : Đo lường mức độ gần gũi của cá thể so với trạng thái mục tiêu.
+    * Tiến hóa:
+      * Selection : Chọn các cá thể có fitness cao để sinh sản.
+      * Crossover: Kết hợp hai cá thể để tạo ra cá thể mới (ví dụ: trao đổi một phần trạng thái), đảm bảo trạng thái vẫn là hoán vị hợp lệ.
+      * Mutation: Thay đổi ngẫu nhiên một phần của cá thể (ví dụ: hoán đổi hai ô ngẫu nhiên), đảm bảo tính hợp lệ của trạng thái.
+  * Ưu điểm:
+    * Nhờ Crossover và Mutation, GA duy trì đa dạng quần thể, vượt qua cực trị cục bộ tốt hơn Hill Climbing hoặc Stochastic Hill ClimBing.
+    * Linh hoạt: Có thể điều chỉnh kích thước quần thể, xác suất mutation và hàm fitness để cải thiện hiệu suất.
+  * Nhược điểm:
+    * Không đảm bảo tìm được đường đi ngắn nhất
+    * Có thể không tìm thấy trạng thái mục tiêu nếu quần thể không hội tụ hoặc số thế hệ không đủ.
+    * Thời gian chạy cao: Đánh giá fitness và xử lý quần thể qua nhiều thế hệ tốn nhiều thời gian.
+    * Phức tạp trong Crosover : Đảm báo trạng thái sau khi Crossover là hoán vị hợp lệ.
+#### Kết luận: 
+* Beam Search là thuật toán phù hợp trong nhóm thuật toán tìm kiém cục bộ nhờ tốc độ, bộ nhớ thấp và khả năng tạo đường đi tương đối ngắn. Tuy nhiên vẫn, nó vẫn kém so với  các thuật toán như A*, IDA* về tính tối ưu và đầy đủ
+* Simulated Annealing phù hợp hơn Hill Climbing và Stochastic Hill Climbing nhờ khả năng thoát cực trị cục bộ, nhưng có thể không hiệu quả bằng Beam Search do thời gian chạy và đường đi dài hơn.
+* Hill Climbing không phù hợp lắm vì không tối ưu , dễ kẹt ở cực trị cục bộ, dẫn đến không tìm được lời giải, đặc biệt là khi trạng thái ban đầu xa mục tiêu hoặc nằm trong vùng cực trị cục bộ. Chỉ phù hợp khi trạng thái ban đầu rất gần với mục tiêu, nhưng vẫn không đáp ứng yêu cầu tính tối ưu và đầy đủ.
+* Stochastic Hill Climbing: không phù hợp vì không tối ưu, không đầy đủ , mặc dù tính ngẫu nhiên giúp giảm nguy cơ kẹt ở cục bộ nhưng vẫn có khả năng thất bại trong các trạng thái phức tạp của 8Puzzle. Trong không gian trạng thái nhỏ, tính ngẫu nhiên không mang lại lợi thế cao , và việc chọn trạng thái kém có thể làm tăng số bước.
+* Genetic Algorithm: không phù hợp do không tối ưu , không đầy đủ (phụ thuộc vào sự đa dạng của quần thể và số thế hệ), thời gian chạy cao do cần đánh giá fitness cho quần thể lớn qua nhiều thế hệ. Bộ nhớ cao hơn so với các thuật toán cùng nhóm,, Phức tạp tong triển khai. Phù hợp với các bài toán lớn hơn như 15 Puzzle.
 ### **Nhóm thuật toán tìm kiếm trong môi trường không xác định**
 #### Nondeterministic Enviroments : Đây là nhóm thuật toán được thiết kế để xử lý các bài toán mà kết quả của một hành động không chắc chắn (có thể dẫn đến nhiều trạng thái khác nhau)
 #### 1. And-or search
@@ -221,6 +254,7 @@ Trạng thái ban đầu (mặc định):
     - Trong không gian có 2 loại nút:
       + or nodes: Đại diện cho các lựa chọn của tác nhân (agent). Tác nhân chỉ chọn 1 nhánh con để giải quyết (tương tự như các nút thông thường)
       + and nodes: Đại diện cho kết quả không xác định của 1 hành động. Tác nhân phải giải quyết tất cả các nhánh con
+    - Mở rộng nút bằng cách: Chọn hành động tại nút Or , sinh tất cả các trạng thái con tại nút AND, tương ứng với các kết quả có thể. 
   * Mục tiêu:  Là xây dựng một cây giải pháp, một kế hoạch để hướng đến trạng thái mục tiêu
   * Ưu điểm:
     - Xử lý môi trường không xác định
@@ -229,7 +263,9 @@ Trạng thái ban đầu (mặc định):
     - Ứng dụng rộng
   * Nhược điểm:
     - Phức tạp và tốn tài nguyên: Việc xây dựng cây giải pháp yêu cầu khám phá nhiều nhánh, dẫn đến chi phí tính toán và bộ nhớ cao
-    - Khó triển khai
+    - Không tối ưu: Kế hoạch có điều kiện có thể dài do phải xử lý tất cả kết quả không xác định, không đảm bảo đường đi ngắn nhất.
+    - Khó triển khai : Xây dựng đòi hỏi quản lý cấu trúc dữ liệu phức tạp
+    - Thời gian chạy cao : Do khám phá nhiều nhánh AND và OR. 
 #### 2. Belief Search(Tìm kiếm dựa trên niềm tin)
   * Cách hoạt động: Được thiết kế cho các bài toán trong môi trường không xác định hoặc nhìn thấy một phần, nơi tác nhân không biết chính xác trạng thái hiện tại của mình. Tác nhân duy trì một tập belief state (tập hợp ác trạng thái có thể xảy ra) và cập nhật niềm tin dựa trên hành động và quan sát
   * Các bước hoạt động:
@@ -245,8 +281,18 @@ Trạng thái ban đầu (mặc định):
     - Nhiều ứng dụng thực tế
   * Nhược điểm:
     - Phức tạp tính toán
+    - Không tối ưu : Do cần khám nhiều belief state và xử lý quan sát hạn chế, không đảm bảo đường đi ngắn nhất.
+    - Thời gian chạy cao : Do cần tính toán và cập nhật lại belief state sau mỗi hành động và quan sát.
     - Tốn bộ nhớ: Belief state có thể tăng trường theo cấp số nhân, dẫn đến khó khăn trong việc lưu trữ và xử lý
     - Khó triển khai
+#### Kết luận: 
+* And-or Search:
+  *  And-or Search là lựa chọn tốt khi 8 Puzzle đặt trong môi trường không xác định, nơi cần lập danh sách có điều kiện để đạt được trạng thái đích.
+  *   Không phù hợp: Không tối ưu so với yêu cầu tìm đường đi ngắn nhất, thời gian chạy cao, phức tạp không cần thiết (với không gian trạng thái nhỏ của 8Puzzle), việc xây dựng cây AND-OR tốn nhiều tài nguyên hơn so với các thuật khác. Hạn chế trong môi trường  xác định (8Puzzle được giải trong môi trường xác định , không mang lại lợi thế cao so với các thuật toán khác).
+*  Belief state:
+  * Phù hợp với môi trường không xác định hoặc quan sát một phần, có thể tìm được lời giải nếu belief state hội tụ về trạng thái mục tiêu và tài nguyên đủ lớn.
+  * không phù hợp : Không tối ưu do xử lý nhiều trạng thái trong belief state, Thời gian chạy cao, Bộ nhớ lớn , Phức tạp không cần thiết (Với 8Puzzle truyền thống (quan sát đầy đủ), Belief state Search quá phức tạp).
+* **Lụa chọn ưu tiên: And-or Search là thuật toán tốt hơn trong nhóm thuật toán tìm kiếm trong môi trường không xác định cho 8 Puzzle nhờ thời gian chạy nhanh, bộ nhớ thấp, khả năng tạo kế hoạch có điều kiện hiệu quả. Sử dụng với hành động rõ ràng.**
 ### **Nhóm thuật toán có ràng buộc điều kiện**
 #### Định nghĩa: 
   * Biến (Variables) : Các đối tượng cần giá trị (Ví dụ: các ô trong lưới 8-Puzzle)
@@ -259,18 +305,44 @@ Trạng thái ban đầu (mặc định):
     - Đơn giản và dễ triển khai
     - Đảm bảo tìm được lời giải nếu có
     - Tốn ít bộ nhớ
+    - Linh hoạt : Có thể tích hợp các cải tiến như chọn biến tối ưu hoặc sắp xếp giá trị trước.
   * Nhược điểm:
     - Hiệu suất thấp: Backtracking thử tất cả các khả năng 1 cách mù quáng, dẫn đến thời gian có thể chạy rất lâu nếu không gian tìm kiếm lớn
     - Không tối ưu: không đảm bảo tìm được đường đi ngắn nhất
-      
-
-
-
-
-
-
-
-
+  * Độ phức tạp:
+    - Thời gian: Phụ thuộc vào số biến và kích thước miền giá trị
+    - Bộ nhớ: Lưu trạng thái hiện tại và miền giá trị.
+#### 2. AC-3  
+    * Cách hoạt động: Thuật toán nhằm kiểm tra giữa các cặp biến cố ràng buộc, loại bỏ các giá trị trong miền giá trị không thỏa mãn ràng buộc.
+    * Ưu điểm: 
+      * Giảm không gian tìm kiếm: Thu hẹp miền giá trị trước khi Backtracking về, giảm số gán giá trị cần thử.
+      * Bộ nhớ thấp: Chỉ lưu hàng đợi và miền giá trị
+      * Hiệu quả với ràng buộc: Ràng buộc trong 8 Puzzle dễ kiểm tra, giúp AC-3 nhanh chóng loại bỏ giá trị không hợp lệ.
+      * Tăng tốc Backtracking
+    * Nhược điểm: 
+      * Không tối ưu 
+      * Thời gian chạy vẫn cao
+      * Hạn chế với các ràng buộc khả thi
+      * Không tận dụng cấu trúc bài toán : Bỏ qua cấu trúc di chuyển của ô trống, kém hiệu quả so với các thuật toán tìm kiếm trạng thái khác như A* , IDA* 
+#### 3. generate_all_states 
+  * Cách hoạt động: Trong bài toán 8 Puzzle, bảng 3x3 có giá trị 9 ô, chứa các giá trị {0, 1, ..., 8}, với 0 là ô trống. Tổng số hoán vị của 9 giá trị là (9!) , nhưng chỉ 1 nửa là khả thi về tính chẳn lẽ hoán vị. Một trạng thái là khả thi nếu có cùng tính chẵn lẽ với trạng thái mục tiêu, được xác định bởi:
+    * Số lần nghịch đảo
+    * Tính khả thi
+  * Ưu điểm:
+    * Đầy đủ: Tạo tất cả các trạng thái khả thi, đảm bảo không bỏ sót trạng thái hợp lệ
+    * Tích hợp với các thuật toán khác để lọc trạng thái
+    * Kiểm tra tính khả thi chính xác: Đảm bảo chỉ giữ lại các trạng thái khả thi.
+  * Nhược điểm:
+    * Thời gian chạy cao
+    * Bộ nhớ lớn
+    * không cần thiết trong tìm kiếm trạng thái
+    * Hiệu suất thấp đối với các bài toán lớn
+#### Kết luận:
+* AC-3 Backtracking Search: Phù hợp hơn trong nhóm thuật toán tìm kiếm có điều kiện ràng buộc do đã giảm nhánh và miền giá trị theo điều kiện ràng buộc, nhưng vẫn kém hiệu quả so với các thuật toán tìm kiếm trạng thái hoặc cục bộ.
+* BackTracking Seach: Ít phù hợp hơn do thời gian chạy cao và số trạng thái khám phá nhiều.
+* Generate_all_state: Cung cấp không gian trạng thái đầy đủ, giảm số trạng thái khám phá , hỗ trợ ràng buộc khả thi nhưng chi phí rất cao và không cần thiết.
+### Nhóm thuật toán 
+  
 
 
 
