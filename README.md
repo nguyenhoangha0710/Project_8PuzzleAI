@@ -10,7 +10,7 @@ Trong ứng dụng này, trạng thái đích là:
               | 4 | 5 | 6 |
               | 7 | 8 | 0 |
 
-## **Tính năng**
+## Mục tiêu
 * **Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking
 * **Giao diện trực quan:** Theo dõi các trạng thái bắt đầu, hiện tại và đích
 * **Điều khiển bước giải:** Chạy từng bước, tự động chạy, quay ngược bước trước
@@ -25,6 +25,7 @@ Các thư viện:
   * pandas (Xử lý dữ liệu)
   * matplotlib (Trực quan hóa)
   * Các thư viên chuẩn khác : time, copy, collections, heapq
+## Nội dung dự án
 ## **Hướng dẫn sử dụng**
 ### **Cách thiết lập trạng thái ban đầu**
 Trạng thái ban đầu (mặc định):
@@ -341,7 +342,36 @@ Trạng thái ban đầu (mặc định):
 * AC-3 Backtracking Search: Phù hợp hơn trong nhóm thuật toán tìm kiếm có điều kiện ràng buộc do đã giảm nhánh và miền giá trị theo điều kiện ràng buộc, nhưng vẫn kém hiệu quả so với các thuật toán tìm kiếm trạng thái hoặc cục bộ.
 * BackTracking Seach: Ít phù hợp hơn do thời gian chạy cao và số trạng thái khám phá nhiều.
 * Generate_all_state: Cung cấp không gian trạng thái đầy đủ, giảm số trạng thái khám phá , hỗ trợ ràng buộc khả thi nhưng chi phí rất cao và không cần thiết.
-### Nhóm thuật toán 
+### Nhóm thuật toán Reinforcement Learning - RL (học củng cố)
+#### 1. Q-Learning 
+* Cách hoạt động : Q-Learning học một bảng giá trị Q, Q(s,a), biểu thị giá trị kỳ vọng của việc thực hiện hành động (a) ở trạng thái (s), sau đó tuân theo các chính sách tối ưu. Thuật toán cập nhật dựa trên công thức : Q(s,a) += alpha * (R + gamma * max( Q(s',a') - Q(s,a)))
+  * (s) : Trạng thái hiện tại
+  * (a) : Hành động được chọn
+  * (R) : Phần thưởng nhận được
+  * (s') : Trạng thái tiếp theo
+  * (alpha): Tỷ lệ học, tỷ lệ để khám phá
+  * (gamma): Hệ số chiết khấu
+* Quá trình thực hiện:
+  * Khởi tạo Q-Table với giá trị ban đầu.
+  * Trong mỗi lần huấn luyện , cập nhật lại Q - Table theo công thức trên
+  * Lặp lại nhiều lần cho đến khi Q-Table hội tụ
+  * Sử dụng Q-Table để chọn chuỗi hành động tối ưu từ trạng thái ban đầu đến mục tiêu.
+* Ưu điểm:
+  * Tính đầy đủ (sau hội tụ): Nếu huấn luyện đủ lâu, Q-Learning đảm bảo tìm được chính sách dẫn đến trạng thái đích nếu có lời giải.
+  * Có thể áp dụng cho nhiều trạng thái ban đầu
+  * Có thể mở rộng trong môi trường không xác định
+* Nhược điểm:
+  * Không tối ưu: Đường đi dài trong giai đoạn khởi đầu, chỉ đạt gần tối ưu khi huấn luyện đủ lâu
+  * Thời gian huấn luyện cao
+  * Bộ nhớ lớn 
+  * Hiệu suất phụ thuộc vào tham số và mức thưởng đề ra
+  * Khó hội tụ với không gian lớn
+#### Kết luận: 
+* Phù hợp:
+  * Tính đầy đủ (sau hội tụ): Đảm bảo timd được đường đi đến mục tiêu nếu huấn luyện đủ lâu
+  * Học chính sách cho mọi trạng thái, hữu ích khi cần giải nhiều trường hợp 8 Puzzle
+  * Mở rộng cho các môi trường phức tạp
+* Nhận xét: Q-Learning phù hợp cho các bài toán cần học dài hạn, nhưng không hiệu quả trong 8-puzzle do không gian trạng thái lớn và yêu cầu tính tối ưu nhanh.  
   
 
 
