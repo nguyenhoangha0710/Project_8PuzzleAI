@@ -313,17 +313,17 @@ Trạng thái ban đầu (mặc định):
     - Thời gian: Phụ thuộc vào số biến và kích thước miền giá trị
     - Bộ nhớ: Lưu trạng thái hiện tại và miền giá trị.
 #### 2. AC-3  
-    * Cách hoạt động: Thuật toán nhằm kiểm tra giữa các cặp biến cố ràng buộc, loại bỏ các giá trị trong miền giá trị không thỏa mãn ràng buộc.
-    * Ưu điểm: 
-      * Giảm không gian tìm kiếm: Thu hẹp miền giá trị trước khi Backtracking về, giảm số gán giá trị cần thử.
-      * Bộ nhớ thấp: Chỉ lưu hàng đợi và miền giá trị
-      * Hiệu quả với ràng buộc: Ràng buộc trong 8 Puzzle dễ kiểm tra, giúp AC-3 nhanh chóng loại bỏ giá trị không hợp lệ.
-      * Tăng tốc Backtracking
-    * Nhược điểm: 
-      * Không tối ưu 
-      * Thời gian chạy vẫn cao
-      * Hạn chế với các ràng buộc khả thi
-      * Không tận dụng cấu trúc bài toán : Bỏ qua cấu trúc di chuyển của ô trống, kém hiệu quả so với các thuật toán tìm kiếm trạng thái khác như A* , IDA* 
+  * Cách hoạt động: Thuật toán nhằm kiểm tra giữa các cặp biến cố ràng buộc, loại bỏ các giá trị trong miền giá trị không thỏa mãn ràng buộc.
+  * Ưu điểm: 
+    * Giảm không gian tìm kiếm: Thu hẹp miền giá trị trước khi Backtracking về, giảm số gán giá trị cần thử.
+    * Bộ nhớ thấp: Chỉ lưu hàng đợi và miền giá trị
+    * Hiệu quả với ràng buộc: Ràng buộc trong 8 Puzzle dễ kiểm tra, giúp AC-3 nhanh chóng loại bỏ giá trị không hợp lệ.
+    * Tăng tốc Backtracking
+  * Nhược điểm: 
+    * Không tối ưu 
+    * Thời gian chạy vẫn cao
+    * Hạn chế với các ràng buộc khả thi
+    * Không tận dụng cấu trúc bài toán : Bỏ qua cấu trúc di chuyển của ô trống, kém hiệu quả so với các thuật toán tìm kiếm trạng thái khác như A* , IDA* 
 #### 3. generate_all_states 
   * Cách hoạt động: Trong bài toán 8 Puzzle, bảng 3x3 có giá trị 9 ô, chứa các giá trị {0, 1, ..., 8}, với 0 là ô trống. Tổng số hoán vị của 9 giá trị là (9!) , nhưng chỉ 1 nửa là khả thi về tính chẳn lẽ hoán vị. Một trạng thái là khả thi nếu có cùng tính chẵn lẽ với trạng thái mục tiêu, được xác định bởi:
     * Số lần nghịch đảo
