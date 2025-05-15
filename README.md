@@ -1,17 +1,17 @@
 # **Giải bài toán 8-Puzzle**
 ## Mục lục
 
-
-- [📌 Giới thiệu](#igiới-thiệu)
+- [I. Giới thiệu](#igiới-thiệu)
   - [Bài toán 8-Puzzle là gì?](#bài-toán-8-puzzle-là-gì)
-- [🎯 II. Mục tiêu](#ii-mục-tiêu)
-- [🖥️ III. Yêu cầu hệ thống](#iii-yêu-cầu-hệ-thống)
-- [📁 IV. Nội dung dự án](#iv-nội-dung-dự-án)
-- [🛠️ V. Hướng dẫn sử dụng](#v-hướng-dẫn-sử-dụng)
+- [ II. Mục tiêu](#ii-mục-tiêu)
+- [ III. Yêu cầu hệ thống](#iii-yêu-cầu-hệ-thống)
+- [ IV. Nội dung dự án](#iv-nội-dung-dự-án)
+- [ V. Hướng dẫn sử dụng](#v-hướng-dẫn-sử-dụng)
   - [1. Cách thiết lập trạng thái ban đầu](#1cách-thiết-lập-trạng-thái-ban-đầu)
   - [2. Chạy các thuật toán](#2chạy-các-thuật-toán)
   - [3. Điều khiển quá trình giải](#3điều-khiển-quá-trình-giải)
   - [4. Phân tích kết quả](#4phân-tích-kết-quả)
+- [VI. Các thuật toán tìm kiếm](#vi-các-thuật-toán-tìm-kiếm) 
 
 ## I. **Giới thiệu**
 8-Puzzle Solver là 1 ứng dụng đồ họa cho phép giải quyết bài toán 8-Puzzle bằng nhiều thuật toán tìm kiếm khác nhau. Ứng dụng cung cấp giao diện trực quan để theo dõi quá trình giải quyết, so sánh hiệu suất giữa các thuật toán và xuất kết quả để phân tích.
