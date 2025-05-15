@@ -1,7 +1,19 @@
 # **Giải bài toán 8-Puzzle**
 ## Mục lục
-- [📌 Giới thiệu](#giới-thiệu)
-## I.**Giới thiệu**
+
+
+- [📌 Giới thiệu](#igiới-thiệu)
+  - [Bài toán 8-Puzzle là gì?](#bài-toán-8-puzzle-là-gì)
+- [🎯 II. Mục tiêu](#ii-mục-tiêu)
+- [🖥️ III. Yêu cầu hệ thống](#iii-yêu-cầu-hệ-thống)
+- [📁 IV. Nội dung dự án](#iv-nội-dung-dự-án)
+- [🛠️ V. Hướng dẫn sử dụng](#v-hướng-dẫn-sử-dụng)
+  - [1. Cách thiết lập trạng thái ban đầu](#1cách-thiết-lập-trạng-thái-ban-đầu)
+  - [2. Chạy các thuật toán](#2chạy-các-thuật-toán)
+  - [3. Điều khiển quá trình giải](#3điều-khiển-quá-trình-giải)
+  - [4. Phân tích kết quả](#4phân-tích-kết-quả)
+
+## I. **Giới thiệu**
 8-Puzzle Solver là 1 ứng dụng đồ họa cho phép giải quyết bài toán 8-Puzzle bằng nhiều thuật toán tìm kiếm khác nhau. Ứng dụng cung cấp giao diện trực quan để theo dõi quá trình giải quyết, so sánh hiệu suất giữa các thuật toán và xuất kết quả để phân tích.
 
 ### **Bài toán 8-Puzzle là gì?**
@@ -12,7 +24,7 @@ Trong ứng dụng này, trạng thái đích là:
               | 4 | 5 | 6 |
               | 7 | 8 | 0 |
 
-## II.Mục tiêu
+## II. Mục tiêu
 * **Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking
 * **Giao diện trực quan:** Theo dõi các trạng thái bắt đầu, hiện tại và đích
 * **Điều khiển bước giải:** Chạy từng bước, tự động chạy, quay ngược bước trước
@@ -20,16 +32,16 @@ Trong ứng dụng này, trạng thái đích là:
 * **Thống kê chi tiết:** So sánh thời gian thực thi, số bước thực hiện, chi phí và không gian tìm kiếm giữa các thuật toán
 * **Trực quan hóa dữ liệu**: Tạo biểu đồ so sánh hiệu suất giữa các thuật toán
 * **Xuất kết quả:** Lưu kết quả và đường đi vào file Excel để tiện cho phân tích sau này
-## III.**Yêu cầu hệ thống**
+## III. **Yêu cầu hệ thống**
 Môi trường Python
 Các thư viện: 
   * Tkinter(GUI)
   * pandas (Xử lý dữ liệu)
   * matplotlib (Trực quan hóa)
   * Các thư viên chuẩn khác : time, copy, collections, heapq
-## IV.Nội dung dự án
-## V.**Hướng dẫn sử dụng**
-### 1.**Cách thiết lập trạng thái ban đầu**
+## IV. Nội dung dự án
+## V. **Hướng dẫn sử dụng**
+### 1. **Cách thiết lập trạng thái ban đầu**
 Trạng thái ban đầu (mặc định):
 
          | 1 | 6 | 2 |
@@ -39,25 +51,25 @@ Trạng thái ban đầu (mặc định):
 2. Nhấn nút "Update Start" để cập nhật lại trạng thái ban đầu
    ![State 8-Puzzle](https://github.com/user-attachments/assets/dacc31eb-68c5-469e-8e19-a11d263a3886)
    
-### 2.**Chạy các thuật toán**
+### 2. **Chạy các thuật toán**
 1. Chọn thuật toán từ menu dropdown (BFS,DFS,UCS,...) hoặc các thuật toán có hướng xử lý khác ở bên ngoài menu
    ![Select Algorithm](https://github.com/user-attachments/assets/0418a759-fb66-485b-8cce-b552caa83046)
    
 2. Nhấn nút "Run Algorithm" để thực thi thuật toán
 3. Theo dõi tiến trình giải quyết trên giao diện "Current State"
-### 3.**Điều khiển quá trình giải**
+### 3. **Điều khiển quá trình giải**
   * **Next Step:** Di chuyển đến bước tiếp theo trong giải pháp
   * **Back Step:** Quay lại bước trước đó
   * **Auto Run:** Tự động thực hiện các bước với tốc độ 1 bước/giây
   * **Stop:** Dừng chế độ tự động chạy
   ![image](https://github.com/user-attachments/assets/f4ab9ac7-f8de-4131-b7b2-3f60f2555438)
 
-### 4.**Phân tích kết quả**
+### 4. **Phân tích kết quả**
   * **Export:** Lưu đường đi giải quyết vào file Excel
   * **Plot Graph:** Tạo biểu đồ so sánh hiệu suất giữa các thuật toán đã chạy
   ![image](https://github.com/user-attachments/assets/b0d6e37d-2974-4867-9218-a5caba657888)
-## VI.**Các thuật toán tìm kiếm**
-### 1.**Nhóm thuật toán tìm kiếm không có thông tin (Uninformed Search/Blind Search)**
+## VI. **Các thuật toán tìm kiếm**
+### 1. **Nhóm thuật toán tìm kiếm không có thông tin (Uninformed Search/Blind Search)**
 #### 1.1. Breadth-First Search (BFS - Tìm kiếm theo chiều rộng):
    * Cách hoạt động: Khám phá tất cả các trạng thái ở cùng một mức (level) trước khi đi sâu hơn. Sử dụng hàng đợi (queue) để mở rộng các trạng thái theo thứ tự từ gần nhất cho đến xa nhất so với trạng thái ban đầu.
    * Ưu điểm:
@@ -118,7 +130,7 @@ Trạng thái ban đầu (mặc định):
        * UCS: Mặc dù tối ưu và đầy đủ nhưng UCS châm hơn BFS trong 8 Puzzle do tính toán chi phí của hàng đợi ưu tiên, trong khi không mang lại lợi thế vì chi phí di chuyển đồng nhất
        * IDS : Tối ưu, tiết kiệm bộ nhớ hơn BFS/UCS nhưng chậm hơn do lặp lại. Phù hợp khi muốn tìm đường đu ngắn nhất nhưng tài nguyên bộ nhớ hạn chế
 
-### 2.**Nhóm thuật toán tìm kiếm có thông tin**
+### 2. **Nhóm thuật toán tìm kiếm có thông tin**
 #### **Đây là nhóm thuật toán sử dụng thông tin heuristic để ưu tiên khám phá các trạng thái có khả năng dẫn đến mục tiêu nhanh hơn**
 #### **Đặc điểm:**
   * Sử dụng hàm heuristic (hàm ước lượng khảng cách từ trạng thái hiện tại đến trạng thái mục tiêu) để định hướng tìm kiếm
@@ -174,13 +186,13 @@ Trạng thái ban đầu (mặc định):
   * Nhanh vì tập trung hướng đến các điểm hứa hẹn
   * Đường đi dài hơn nhưng vẫn khả thi
   * Bộ nhớ ổn định   
-### 3.**Nhóm thuật tìm kiếm toán cục bộ**
+### 3. **Nhóm thuật tìm kiếm toán cục bộ**
 #### Đây là thuật toán không khám phá toàn bộ trạng thái mà tập trung vào việc tập trung cải thiện một trạng thái hiện tại, thường dùng cho các bài toán tối ưu
 #### Đặc điểm:
   * Bắt đầu từ một trạng thái ban đầu và cải thiện dần trạng thái đó theo một tiêu chí (thường là heuristic)
   * Không đảm bảo tìm được lời giải tối ưu toàn cục, nhưng nhanh và hiệu quả ở các bài toán lớn 
   * Không lưu trữ nhiều trạng thái, chỉ làm việc với một hoặc hai trạng thái tại 1 thời điểm
-#### 3.1.Hill ClimBing(Leo đồi)
+#### 3.1. Hill ClimBing(Leo đồi)
   * Cách hoạt động: Từ trạng thái hiện tại, chọn trạng thái láng giềng có giá trị heuristic tốt nhất (giảm nhất). Lặp lại cho đến khi không thể cải thiện thêm. Chỉ dựa trên heuristic, tương tự GBFS nhưng không khám phá nhiều trạng thái cùng lúc.
   * Ưu điểm:
     * Rất nhanh, vì chỉ xem xét các trạng thái lân cận.
@@ -295,8 +307,8 @@ Trạng thái ban đầu (mặc định):
 *  Belief state:
   * Phù hợp với môi trường không xác định hoặc quan sát một phần, có thể tìm được lời giải nếu belief state hội tụ về trạng thái mục tiêu và tài nguyên đủ lớn.
   * không phù hợp : Không tối ưu do xử lý nhiều trạng thái trong belief state, Thời gian chạy cao, Bộ nhớ lớn , Phức tạp không cần thiết (Với 8Puzzle truyền thống (quan sát đầy đủ), Belief state Search quá phức tạp).
-* **Lụa chọn ưu tiên: And-or Search là thuật toán tốt hơn trong nhóm thuật toán tìm kiếm trong môi trường không xác định cho 8 Puzzle nhờ thời gian chạy nhanh, bộ nhớ thấp, khả năng tạo kế hoạch có điều kiện hiệu quả. Sử dụng với hành động rõ ràng.**
-### 5.**Nhóm thuật toán có ràng buộc điều kiện**
+* **Lựa chọn ưu tiên: And-or Search là thuật toán tốt hơn trong nhóm thuật toán tìm kiếm trong môi trường không xác định cho 8 Puzzle nhờ thời gian chạy nhanh, bộ nhớ thấp, khả năng tạo kế hoạch có điều kiện hiệu quả. Sử dụng với hành động rõ ràng.**
+### 5. **Nhóm thuật toán có ràng buộc điều kiện**
 #### Định nghĩa: 
   * Biến (Variables) : Các đối tượng cần giá trị (Ví dụ: các ô trong lưới 8-Puzzle)
   * Miền giá trị (Domains): Tập hợp các giá trị có thể gán (ví dụ: các số từ 0 - 8 trong bài toán 8-Puzzle)
