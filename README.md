@@ -96,7 +96,7 @@ Trong ứng dụng này, trạng thái đích là:
               | 7 | 8 | 0 |
 
 ## III. Mục tiêu
-* **Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking
+* **Đa dạng thuật toán:** BFS,DFS,UCS,GBFS,A*,IDA*,Hill ClimBing,Stochastic Hill Climbing, Simulated Anealing, Beam Search, And or search , Belief Enviroment Search, BackTracking,......
 * **Giao diện trực quan:** Theo dõi các trạng thái bắt đầu, hiện tại và đích
 * **Điều khiển bước giải:** Chạy từng bước, tự động chạy, quay ngược bước trước
 * **Tùy chỉnh trạng thái ban đầu:** Nhập trạng thái 8-Puzzle tùy chọn
@@ -213,7 +213,7 @@ Trạng thái ban đầu (mặc định):
        * Ứng dụng thực tế: Trong 8 Puzzle, BFS cung cấp kết quả nhanh
      * Lý do loại bỏ các thuật toán khác:
        * DFS: không phù hợp do không tối ưu (đường đi dài) và không đầy đủ nếu không kiểm soát độ sâu. Kết quả thường không đáp ứng yêu cầu tìm đường đi ngắn nhất, thời gian chạy không ổn định
-       * UCS: Mặc dù tối ưu và đầy đủ nhưng UCS châm hơn BFS trong 8 Puzzle do tính toán chi phí của hàng đợi ưu tiên, trong khi không mang lại lợi thế vì chi phí di chuyển đồng nhất
+       * UCS: Mặc dù tối ưu và đầy đủ nhưng UCS chậm hơn BFS trong 8 Puzzle do tính toán chi phí của hàng đợi ưu tiên, trong khi không mang lại lợi thế vì chi phí di chuyển đồng nhất
        * IDS : Tối ưu, tiết kiệm bộ nhớ hơn BFS/UCS nhưng chậm hơn do lặp lại. Phù hợp khi muốn tìm đường đu ngắn nhất nhưng tài nguyên bộ nhớ hạn chế
 
 ### 2. **Nhóm thuật toán tìm kiếm có thông tin**
@@ -242,7 +242,7 @@ Trạng thái ban đầu (mặc định):
    * Ưu điểm:
      * Đảm bảo tìm được đường đi tối ưu nếu hàm heuristic là "admissible" (không bao giờ đánh giá quá cao so với thực tế).
      * Hiệu quả hơn BFS và UCS nhờ heuristic định hướng tìm kiếm, giảm số trạng thái cần duyệt.
-     *  Hoàn chỉnh (luôn tìm được giải pháp nếu nó tồn tại).
+     * Hoàn chỉnh (luôn tìm được giải pháp nếu nó tồn tại).
    * Nhược điểm:
      * Khá tốn bộ nhớ vì phải lưu trữ tất cả trạng thái trong hàng đợi ưu tiên
      * Thời gian chạy phụ thuộc vào chất lượng heuristic; nếu heuristic kém, hiệu suất có thể giảm.
