@@ -65,7 +65,7 @@
    - [6. Nhóm thuật toán Reinforcement Learning - RL (học củng cố)](#6-nhóm-thuật-toán-reinforcement-learning---rl-học-củng-cố)
      - [6.1. Q-Learning](#61-q-learning)
      - [Kết luận:](#kết-luận)
- - [VII. Kết luận](#vii-kết-luận)
+  [VII. Kết luận](#vii-kết-luận)
 
 
 
