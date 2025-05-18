@@ -493,7 +493,7 @@ Trạng thái ban đầu (mặc định):
 * ![alt text](QLearning.mkv.gif)
 #### Kết luận: 
 * Phù hợp:
-  * Tính đầy đủ (sau hội tụ): Đảm bảo timd được đường đi đến mục tiêu nếu huấn luyện đủ lâu
+  * Tính đầy đủ (sau hội tụ): Đảm bảo tìm được đường đi đến mục tiêu nếu huấn luyện đủ lâu
   * Học chính sách cho mọi trạng thái, hữu ích khi cần giải nhiều trường hợp 8 Puzzle
   * Mở rộng cho các môi trường phức tạp
 * Nhận xét: Q-Learning phù hợp cho các bài toán cần học dài hạn, nhưng không hiệu quả trong 8-puzzle do không gian trạng thái lớn và yêu cầu tính tối ưu nhanh.  
