@@ -6,8 +6,9 @@ import heapq
 import time
 import pandas as pd
 import matplotlib.pyplot as plt
-from dfs import *
-
+from algorithm import *
+from queue import Queue
+# 251 763 840
 class PuzzleGUI:
     def __init__(self, root):
         self.root = root
@@ -20,10 +21,12 @@ class PuzzleGUI:
         self.running = False
         self.auto_running = False
         self.backtracking_running = False
+        self.generating_states = False
         
         self.stats = {
             "BFS": {"time": "-", "steps": "-", "cost": "-", "space": "-"},
             "DFS": {"time": "-", "steps": "-", "cost": "-", "space": "-"},
+            "IDS": {"time": "-", "steps": "-", "cost": "-", "space": "-"},
             "UCS": {"time": "-", "steps": "-", "cost": "-", "space": "-"},
             "GBFS": {"time": "-", "steps": "-", "cost": "-", "space": "-"},
             "A*": {"time": "-", "steps": "-", "cost": "-", "space": "-"},
@@ -91,9 +94,10 @@ class PuzzleGUI:
         algo_label.grid(row=0, column=0, columnspan=3, pady=5)
 
         self.algo_map = {
-            "BFS": bfs, "DFS": dfs, "UCS": ucs, "GBFS": gbfs, "A*": A_start, "IDA*": ida_start,
+            "BFS": bfs, "DFS": dfs,"IDS" : ids, "UCS": ucs, "GBFS": gbfs, "A*": A_start, "IDA*": ida_start,
             "HillClim": SimpleHillClimbing, "StochasticHC": StochasticHillClimbing, "SimAnneal": SimulatedAnnealing,
-            "BeamSearch": BeamSearch, "AndOr": and_or_search
+            "BeamSearch": BeamSearch, "AndOr": and_or_search, "Genetic" : genetic_algorithm, "Q-Learning" : q_learning,
+            "Backtracking+AC3": self.backtracking_with_ac3
         }
         
         self.algo_combobox = ttk.Combobox(self.algo_frame, values=list(self.algo_map.keys()), state="readonly", width=12 , font=("Helvetica", 16))
@@ -102,6 +106,7 @@ class PuzzleGUI:
         
         ttk.Button(self.algo_frame, text="Run Algorithm", command=self.run_selected_algorithm).grid(row=1, column=1, padx=5, pady=5)
         ttk.Button(self.algo_frame, text="Backtracking", command=self.backtracking).grid(row=1, column=2, padx=5, pady=5)
+        ttk.Button(self.algo_frame, text="Generate All States", command=self.generate_all_states).grid(row=1, column=3, padx=5, pady=5)
 
         # Create control buttons (2 rows)
         control_label = ttk.Label(self.control_frame, text="Controls", style="Header.TLabel")
@@ -182,7 +187,8 @@ class PuzzleGUI:
             ttk.Label(stats_container, text=header, style="Stats.TLabel", width=12).grid(row=0, column=col, padx=1, pady=1, sticky="nsew")
         
         self.stats_labels = {}
-        algorithms = ["BFS", "DFS", "UCS", "GBFS", "A*", "IDA*", "HillClim", "StochasticHC", "SimAnneal", "BeamSearch", "AndOr"]
+        algorithms = ["BFS", "DFS", "IDS","UCS", "GBFS", "A*", "IDA*", "HillClim", 
+                      "StochasticHC", "SimAnneal", "BeamSearch", "AndOr","Genetic","Q-Learning", "Backtracking+AC3"]
         for row, algo in enumerate(algorithms, start=1):
             self.stats_labels[algo] = {
                 "name": ttk.Label(stats_container, text=algo, style="Stats.TLabel", width=12),
@@ -267,6 +273,11 @@ class PuzzleGUI:
             self.status_label.configure(text="Backtracking stopped")
             # self.current_state = copy.deepcopy(self.start_state)  # Reset current state
             # self.update_grid(self.current_labels, self.current_state)
+        if self.generating_states: 
+            self.generating_states = False
+            self.status_label.configure(text="Generating states stopped")
+            # self.current_state = copy.deepcopy(self.start_state)  # Reset current state
+            # self.update_grid(self.current_labels, self.current_state)
         algo_name = self.algo_combobox.get()
         algorithm = self.algo_map.get(algo_name)
         if algorithm:
@@ -333,7 +344,7 @@ class PuzzleGUI:
 
     def backtracking(self):
         self.backtracking_running = True
-        values = [1, 2, 4, 3, 7, 6, 8, 5]
+        values = [1, 2, 3, 4, 5, 7, 8, 6]
         visited = set()
         path = []
         def dfs_BT(depth):
@@ -369,6 +380,256 @@ class PuzzleGUI:
             return (path, len(path)) if success else (None, -1)
         return (None, -1)
 
+
+
+    def generate_all_states(self, start=[1, 2, 3, 4, 5, 7, 8, 6, 0]):
+        """
+        Sinh tất cả các trạng thái của 8-Puzzle, hiển thị từng trạng thái trên GUI với độ trễ 0.5s,
+        và kiểm tra tính solvable của từng trạng thái.
+        Giả sử self có các thuộc tính: current_labels, root, update_grid.
+        """
+        self.generating_states = True
+        values = list(range(9))
+        state = [list(start[i*3:(i+1)*3]) for i in range(3)]
+        solvable_states = []
+        
+        # Hiển thị trạng thái ban đầu
+        self.update_grid(self.current_labels, state)
+        self.root.update()
+        time.sleep(0.5)
+        
+        if checkif(state):
+            solvable_states.append(state)
+        
+        all_permutations = itertools.permutations(start)  # Sinh tất cả các hoán vị
+
+        for perm in all_permutations:
+            if not self.generating_states:
+                return solvable_states
+            state = [list(perm[i*3:(i+1)*3]) for i in range(3)]
+            
+            # Hiển thị trạng thái hiện tại trên giao diện
+            self.update_grid(self.current_labels, state)
+            self.root.update()
+            time.sleep(0.5)  # Độ trễ 0.5 giây để người dùng thấy trạng thái
+            
+            if checkif(state):
+                solvable_states.append(state)
+                return solvable_states
+        
+        return solvable_states
+    
+
+    class CSP:
+        def __init__(self, variables, domains, constraints):
+            self.variables = variables
+            self.domains = domains
+            self.constraints = constraints
+    def propagate_constraint_on_assignment(self, csp, var, val):
+        i, j = divmod(int(var[1:]) - 1, 3)
+        neighbors = csp.constraints[var]
+
+        for neighbor in neighbors:
+            ni, nj = divmod(int(neighbor[1:]) - 1, 3)
+            new_domain = []
+            for neighbor_val in csp.domains[neighbor]:
+                # Nếu val là ô trống, chỉ giữ lại các giá trị có thể hoán đổi từ neighbor sang var
+                if val == 0 and abs(ni - i) + abs(nj - j) == 1:
+                    new_domain.append(neighbor_val)
+                # Nếu neighbor_val là 0, có thể hoán với val
+                elif neighbor_val == 0 and abs(ni - i) + abs(nj - j) == 1:
+                    new_domain.append(neighbor_val)
+                # Nếu cả hai đều khác 0 thì vẫn có thể giữ
+                elif val != 0 and neighbor_val != 0:
+                    new_domain.append(neighbor_val)
+            csp.domains[neighbor] = new_domain
+
+
+    def initialize_csp_for_backtracking(self, start=None):
+        a = [1,2,3,4,5,7,6,8,0]
+        variables = [f"V{i+1}" for i in range(9)]
+        domains = {var: a for var in variables}  # Miền ban đầu: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        
+        constraints = {}
+        # Không thêm cung, vì constraint_satisfied xử lý all-different và trạng thái đích
+        for var in variables:
+            constraints[var] = []
+        
+        return self.CSP(variables, domains, constraints)
+
+
+    def constraint_satisfied(self, val1, val2, var1, var2):
+        # Ràng buộc all-different
+        if val1 == val2:
+            return False
+
+        # Xử lý định dạng biến
+        try:
+            var1_idx = int(var1[1:]) - 1
+            var2_idx = int(var2[1:]) - 1
+        except (ValueError, IndexError):
+            raise ValueError(f"Invalid variable format: {var1}, {var2}")
+
+        var1_pos = divmod(var1_idx, 3)
+        var2_pos = divmod(var2_idx, 3)
+
+        # Ràng buộc trạng thái đích
+        # Hàng: V1=1, V2=2, V3=3; V4=4, V5=5, V6=6; V7=7, V8=8, V9=0
+        expected_values = {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 0}
+        if var1_idx in expected_values and val1 != expected_values[var1_idx]:
+            return False
+        if var2_idx in expected_values and val2 != expected_values[var2_idx]:
+            return False
+
+        return True
+    def revise(self, csp, xi, xj):
+        revised = False
+        values_to_remove = []
+        for x in csp.domains[xi]:
+            if not any(self.constraint_satisfied(x, y, xi, xj) for y in csp.domains[xj]):
+                values_to_remove.append(x)
+                revised = True
+        for x in values_to_remove:
+            csp.domains[xi].remove(x)
+        
+        return revised
+    def ac3(self, csp):
+        queue = Queue()
+        for var1 in csp.variables:
+            for var2 in csp.constraints.get(var1, []):
+                queue.put((var1, var2))
+        while not queue.empty():
+            (xi, xj) = queue.get()
+            if self.revise(csp, xi, xj):
+                print(f"After revising ({xi}, {xj}): {csp.domains}")
+                if not csp.domains[xi]:
+                    return False
+                for xk in csp.constraints.get(xi, []):
+                    if xk != xj:
+                        queue.put((xk, xi))
+        return True
+
+    def backtracking_with_ac3(self, start=None, goal=None):
+        self.backtracking_running = True
+        visited = set()
+        var_assignments = {}
+        space = 0
+
+        csp = self.initialize_csp_for_backtracking(start)
+        print("Initial domains:", csp.domains)
+        if not self.ac3(csp):
+            self.status_label.configure(text="No consistent solution")
+            self.backtracking_running = False
+            self.update_stats("Backtracking+AC3", 0, "-", "-", "-")
+            return None, -1, 0
+
+        def select_mrv_variable(csp, assigned):
+            unassigned = [var for var in csp.variables if var not in assigned]
+            if not unassigned:
+                return None
+            return min(unassigned, key=lambda var: len(csp.domains[var]))
+
+        def dfs_backtracking(assigned, update_counter=0):
+            nonlocal space
+            if not self.backtracking_running or not self.root.winfo_exists():
+                return False
+
+            if len(assigned) == 9:
+                grid_state = [[0 for j in range(3)] for i in range(3)]
+                for var, value in var_assignments.items():
+                    idx = int(var[1:]) - 1
+                    i, j = divmod(idx, 3)
+                    grid_state[i][j] = value
+                print("Checking state:", grid_state)
+                if checkif(grid_state):
+                    self.current_state = grid_state
+                    try:
+                        self.update_grid(self.current_labels, grid_state)
+                        time.sleep(0.5)
+                        self.status_label.configure(text="Found valid state!")
+                        self.root.update()
+                    except _tkinter.TclError:
+                        self.backtracking_running = False
+                    return True
+                return False
+
+            var = select_mrv_variable(csp, assigned)
+            if var is None:
+                return False
+
+            domain = csp.domains[var][:]
+            for x in domain:
+                if x not in visited:
+                    var_assignments[var] = x
+                    visited.add(x)
+                    assigned.add(var)
+                    space = max(space, len(visited))
+
+                    grid_state = [[0 for j in range(3)] for i in range(3)]
+                    for v, value in var_assignments.items():
+                        idx = int(v[1:]) - 1
+                        i, j = divmod(idx, 3)
+                        grid_state[i][j] = value
+                    print(f"Assigned: {var_assignments}, Grid: {grid_state}")
+                    try:
+                        self.update_grid(self.current_labels, grid_state)
+                        time.sleep(0.55)
+                        self.status_label.configure(text=f"Assigning {x} to {var}")
+                        self.root.update()
+                        time.sleep(0.1)
+                    except _tkinter.TclError:
+                        self.backtracking_running = False
+                        return False
+
+                    csp_copy = copy.deepcopy(csp)
+                    csp_copy.domains[var] = [x]
+                    self.propagate_constraint_on_assignment(csp_copy, var, x)
+                    if self.ac3(csp_copy):
+                        csp.domains = csp_copy.domains
+                        if dfs_backtracking(assigned, update_counter):
+                            return True
+                        csp.domains = copy.deepcopy(csp_copy.domains)
+
+                    visited.remove(x)
+                    assigned.remove(var)
+                    del var_assignments[var]
+                    grid_state = [[0 for j in range(3)] for i in range(3)]
+                    for v, value in var_assignments.items():
+                        idx = int(v[1:]) - 1
+                        i, j = divmod(idx, 3)
+                        grid_state[i][j] = value
+                    print(f"Backtracking: {var_assignments}, Grid: {grid_state}")
+                    try:
+                        self.update_grid(self.current_labels, grid_state)
+                        time.sleep(0.55)
+                        self.status_label.configure(text=f"Backtracking from {var}, removed {x}")
+                        self.root.update()
+                        time.sleep(0.1)
+                    except _tkinter.TclError:
+                        self.backtracking_running = False
+                        return False
+
+            return False
+
+        start_time = time.time()
+        success = dfs_backtracking(set())
+        exec_time = time.time() - start_time
+        if self.backtracking_running:
+            self.backtracking_running = False
+            self.status_label.configure(text="Backtracking stopped")
+            if success:
+                grid_state = [[0 for j in range(3)] for i in range(3)]
+                for var, value in var_assignments.items():
+                    idx = int(var[1:]) - 1
+                    i, j = divmod(idx, 3)
+                    grid_state[i][j] = value
+                self.solution = grid_state
+                steps = len(var_assignments)
+                self.update_stats("Backtracking+AC3", exec_time, steps, steps, space)
+                return grid_state, steps, space
+        self.update_stats("Backtracking+AC3", exec_time, "-", "-", "-")
+        return None, -1, space
+        
     def show_help(self):
         help_text = """
         8-Puzzle Solver Help:
